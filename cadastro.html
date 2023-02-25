@@ -15,16 +15,17 @@
             const data = {
                 "nome": nome,
                 "dataCadastro": dataCadastro,
-                "departamento": departamento,
-                "aceite": aceite
+                "departamento": departamento
+                
             }
             
-            fetch("http//localhost:9999/categorias",{
+            fetch("http://localhost:5224/categorias",{
                 method: "POST",
+                mode: 'cors',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringfy(data)
+                body: JSON.stringify(data)
             }).then((response) => response.json())
             .then((result) => {
                 Swal.fire(
