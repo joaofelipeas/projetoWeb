@@ -6,10 +6,108 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Categorias</title>,<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript">
+
+        function listar(){
+            fetch("http://localhost:5224/categorias",{
+                method: "GET",
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+            }).then((response) => response.json())
+            .then((result) => {
+                renderizar(result)
+            })
+            .catch((error) => {
+                console.log(error)
+                Swal.fire(
+                'Erro',
+                'Houve um erro ao salvar os dados',
+                'error'
+                )
+            })
+        }
+
+        function excluir(id){
+            fetch("http://localhost:5224/categorias/" + id, {
+                method: "DELETE",
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                
+            }).then((response) => response.json())
+            .then((result) => {
+                listar()
+            })
+            .catch((error) => {
+                console.log(error)
+                Swal.fire(
+                'Erro',
+                'Houve um erro ao excluir a categoria',
+                'error'
+                )
+            }) 
+        }
+        
+        function renderizar(categorias){
+            
+            
+
+            let tabela = document.querySelector("#tabela tbody")
+            while(tabela.firstChild){
+                tabela.removeChild(tabela.firstChild)
+            }
+            
+            for(let categoria of categorias){
+                
+                let linha = `
+                   <tr>
+                        <td>${categoria.id}</td>
+                        <td>${categoria.nome}</td>
+                        <td>${categoria.departamento}</td>
+                        <td>${categoria.dataCadastro}</td>
+                        <td>
+                            <a href="javascript: excluir(${categoria.id})">Excluir</a>  
+                        </td>
+                    
+                   </tr> 
+                `
+                let tr = document.createElement("tr")
+                tr.innerHTML = linha
+                
+                tabela.appendChild(tr)
+            }
+        }
+
+    </script>
+
 </head>
-<body>
+<body onload="listar()">
     <div class="container-fluid p-2">
         <a href="index.html" class="btn btn-primary">Voltar</a>
+        
+        <table class="table table-striped" id="tabela">
+            <thead>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Nome</th>
+                <th scope="col">Departamento</th>
+                <th scope="col">Data de Cadastro</th>
+                <th scope="col">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+               
+              </tr>
+              
+            </tbody>
+          </table>
     </div>
 </body>
 </html>

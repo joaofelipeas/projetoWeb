@@ -28,6 +28,11 @@
                 body: JSON.stringify(data)
             }).then((response) => response.json())
             .then((result) => {
+                
+                document.getElementById("nome").value = ""
+                document.getElementById("dataCadastro").value = ""
+                document.getElementById("aceite").checked = false
+                
                 Swal.fire(
                 'Sucesso',
                 'Categoria cadastrada com sucesso',
